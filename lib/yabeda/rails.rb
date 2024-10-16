@@ -25,7 +25,7 @@ module Yabeda
       end
 
       # Declare metrics and install event handlers for collecting themya
-      # rubocop: disable Metrics/MethodLength, Metrics/BlockLength, Metrics/AbcSize
+      # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
       def install!
         Yabeda.configure do
           config = ::Yabeda::Rails.config
@@ -39,10 +39,6 @@ module Yabeda
                                        unit: :seconds,
                                        buckets: LONG_RUNNING_REQUEST_BUCKETS,
                                        comment: "A histogram of the response latency."
-
-          histogram :view_runtime, unit: :seconds, buckets: LONG_RUNNING_REQUEST_BUCKETS,
-                                   comment: "A histogram of the view rendering time.",
-                                   tags: %i[controller action status format method]
 
           histogram :db_runtime, unit: :seconds, buckets: LONG_RUNNING_REQUEST_BUCKETS,
                                  comment: "A histogram of the activerecord execution time.",
@@ -59,7 +55,6 @@ module Yabeda
 
             rails_requests_total.increment(event.labels)
             rails_request_duration.measure(event.labels, event.duration)
-            rails_view_runtime.measure(event.labels, event.view_runtime)
             rails_db_runtime.measure(event.labels, event.db_runtime)
 
             Yabeda::Rails.controller_handlers.each do |handler|
@@ -68,7 +63,7 @@ module Yabeda
           end
         end
       end
-      # rubocop: enable Metrics/MethodLength, Metrics/BlockLength, Metrics/AbcSize
+      # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
 
       def config
         @config ||= Config.new

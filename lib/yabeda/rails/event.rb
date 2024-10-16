@@ -21,10 +21,6 @@ module Yabeda
         ms2s super
       end
 
-      def view_runtime
-        ms2s payload[:view_runtime]
-      end
-
       def db_runtime
         ms2s payload[:db_runtime]
       end
